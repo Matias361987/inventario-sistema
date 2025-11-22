@@ -10,4 +10,4 @@ WORKDIR /app
 # Copiamos el archivo .jar generado en el paso anterior
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java", "-Xmx300m", "-Xss512k", "-jar", "app.jar"]
