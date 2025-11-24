@@ -3,46 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ColorPrint</title>
+    <title>Acceso - ColorPrint</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* FONDO ELEGANTE */
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Evita scrollbars */
+        }
+
+        /* TARJETA DE LOGIN */
+        .login-card {
+            background: rgba(255, 255, 255, 0.95); /* Blanco casi puro */
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5); /* Sombra profunda */
+            overflow: hidden;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            background: #1a1a1a; /* Negro Lux */
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            color: #d39e00; /* Dorado sutil */
+            margin-bottom: 10px;
+        }
+
+        /* ESTILOS DE INPUTS */
+        .form-control {
+            border-radius: 0 10px 10px 0;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-left: none;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #1a1a1a;
+        }
+
+        .input-group-text {
+            border-radius: 10px 0 0 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-right: none;
+            color: #1a1a1a;
+        }
+
+        /* BOTÓN PERSONALIZADO */
+        .btn-login {
+            background-color: #1a1a1a;
+            color: white;
+            border-radius: 50px;
+            padding: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background-color: #d39e00; /* Dorado al pasar mouse */
+            transform: translateY(-2px); /* Efecto de elevación */
+            color: white;
+            box-shadow: 0 5px 15px rgba(211, 158, 0, 0.4);
+        }
+
+        .footer-text {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 25px;
+        }
+    </style>
 </head>
-<body class="bg-light d-flex align-items-center min-vh-100">
+<body>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h4 class="mb-0 text-uppercase">ColorPrint Acceso</h4>
-                </div>
-                <div class="card-body p-4">
+<div class="login-card animate__animated animate__fadeInDown">
 
-                    <div th:if="${param.error}" class="alert alert-danger text-center">
-                        Usuario o contraseña incorrectos.
-                    </div>
-                    <div th:if="${param.logout}" class="alert alert-success text-center">
-                        Has cerrado sesión correctamente.
-                    </div>
+    <div class="login-header">
+        <i class="fas fa-cube logo-icon animate__animated animate__pulse animate__infinite"></i>
+        <h3 class="text-uppercase fw-bold mb-0">ColorPrint</h3>
+        <small class="text-muted text-white-50">Sistema de Gestión</small>
+    </div>
 
-                    <form th:action="@{/login}" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Usuario</label>
-                            <input type="text" id="username" name="username" class="form-control" placeholder="Ej: jorge" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
-                        </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">INGRESAR</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="card-footer text-center bg-white border-0 text-muted">
-                    <small>Sistema de Inventario Interno</small>
+    <div class="card-body p-4 p-md-5">
+
+        <div th:if="${param.error}" class="alert alert-danger text-center py-2 small rounded-pill mb-4 animate__animated animate__headShake">
+            <i class="fas fa-exclamation-circle me-1"></i> Credenciales incorrectas
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success text-center py-2 small rounded-pill mb-4 animate__animated animate__fadeIn">
+            <i class="fas fa-check-circle me-1"></i> Sesión cerrada correctamente
+        </div>
+
+        <form th:action="@{/login}" method="post">
+
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" name="username" class="form-control" placeholder="Usuario" required autofocus autocomplete="off">
                 </div>
             </div>
-        </div>
+
+            <div class="mb-4">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+                </div>
+            </div>
+
+            <div class="d-grid mt-5">
+                <button type="submit" class="btn btn-login shadow">
+                    INGRESAR <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+
+            <div class="text-center footer-text">
+                &copy; 2025 ColorPrint Inventario<br>
+                <small>Acceso exclusivo personal autorizado</small>
+            </div>
+        </form>
     </div>
 </div>
 
