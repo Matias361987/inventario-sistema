@@ -5,49 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lista - ColorPrint</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    body { background-color: #f8f9fa; }
+    .table-card {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden; /* Para que la tabla respete los bordes redondos */
+    }
+    .stock-controls .btn {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+    }
+    .stock-controls .btn:active { transform: scale(0.9); }
+    .badge-stock { font-size: 0.9rem; min-width: 45px; display: inline-block; text-align: center;}
+
+    /* Efecto Hover en filas */
+    tbody tr { transition: background-color 0.2s; }
+  </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark bg-primary mb-4">
+<nav class="navbar navbar-dark bg-primary mb-4 shadow-sm">
   <div class="container">
-    <a class="navbar-brand fw-bold" href="/">COLORPRINT INVENTARIO</a>
-    <a href="/" class="btn btn-sm btn-light text-primary fw-bold"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+    <a class="navbar-brand fw-bold" href="/">COLORPRINT</a>
+    <a href="/" class="btn btn-sm btn-light rounded-pill fw-bold px-3">
+      <i class="fas fa-arrow-left me-1"></i> Volver al Panel
+    </a>
   </div>
 </nav>
 
-<div class="container">
-  <div class="card shadow-lg">
-    <div class="card-header bg-white d-flex justify-content-between align-items-center">
-      <h3 class="text-uppercase mb-0">
-        <i class="fas fa-folder-open text-warning me-2"></i>
-        <span th:text="${categoriaActual}">Categoría</span>
-      </h3>
-      <a href="/nuevo" class="btn btn-dark"><i class="fas fa-plus"></i> Nuevo</a>
+<div class="container animate__animated animate__fadeInUp">
+
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center">
+      <div class="bg-dark text-white rounded p-2 me-3">
+        <i class="fas fa-layer-group fa-lg"></i>
+      </div>
+      <div>
+        <h6 class="text-uppercase text-muted mb-0 small fw-bold">Viendo Categoría</h6>
+        <h2 class="fw-bold mb-0" th:text="${categoriaActual}">NOMBRE</h2>
+      </div>
     </div>
-    <div class="card-body">
+    <a href="/nuevo" class="btn btn-primary rounded-pill shadow-sm">
+      <i class="fas fa-plus"></i> <span class="d-none d-md-inline">Nuevo Item</span>
+    </a>
+  </div>
+
+  <div class="card table-card shadow-lg">
+    <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-dark">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-dark">
           <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th class="d-none d-sm-table-cell">Descripción</th>
+            <th class="ps-4">ID</th>
+            <th>Producto</th>
             <th>Precio</th>
-            <th class="text-center">Stock</th>
+            <th class="text-center bg-light border-start">Control de Stock</th>
           </tr>
           </thead>
-          <tbody>
+          <tbody class="bg-white">
           <tr th:each="p : ${productos}">
-            <td class="fw-bold text-muted" th:text="${p.id}"></td>
-            <td class="fw-bold text-nowrap" th:text="${p.nombre}"></td>
-            <td class="d-none d-sm-table-cell" th:text="${p.descripcion}"></td>
-            <td class="text-nowrap" th:text="${'$ ' + p.precio}"></td>
+            <td class="ps-4 text-muted small" th:text="${'#' + p.id}"></td>
+
             <td>
-              <div class="d-flex justify-content-center gap-2">
-                <a th:href="@{/producto/{id}/stock/-1(id=${p.id})}" class="btn btn-sm btn-outline-danger"><i class="fas fa-minus"></i></a>
-                <span class="badge bg-secondary p-2" th:text="${p.cantidad}" style="min-width: 40px;">0</span>
-                <a th:href="@{/producto/{id}/stock/1(id=${p.id})}" class="btn btn-sm btn-outline-success"><i class="fas fa-plus"></i></a>
+              <div class="fw-bold text-dark" th:text="${p.nombre}"></div>
+              <div class="small text-muted" th:text="${p.descripcion}"></div>
+            </td>
+
+            <td class="fw-bold text-success" th:text="${'$ ' + p.precio}"></td>
+
+            <td class="text-center border-start">
+              <div class="stock-controls d-inline-flex align-items-center bg-light rounded-pill p-1 border">
+                <a th:href="@{/producto/{id}/stock/-1(id=${p.id})}" class="btn btn-outline-danger border-0">
+                  <i class="fas fa-minus small"></i>
+                </a>
+
+                <span class="badge-stock fw-bold mx-2 text-dark" th:text="${p.cantidad}">0</span>
+
+                <a th:href="@{/producto/{id}/stock/1(id=${p.id})}" class="btn btn-outline-success border-0">
+                  <i class="fas fa-plus small"></i>
+                </a>
               </div>
             </td>
           </tr>
@@ -55,6 +101,10 @@
         </table>
       </div>
     </div>
+  </div>
+
+  <div class="text-center mt-4 text-muted small">
+    <i class="fas fa-info-circle me-1"></i> Los cambios de stock se guardan automáticamente.
   </div>
 </div>
 
