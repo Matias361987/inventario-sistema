@@ -18,11 +18,11 @@ public class SeguridadConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll() // Permitir estilos
-                        .anyRequest().authenticated() // Todo lo demás requiere login
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // Nuestra página personalizada
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout((logout) -> logout
@@ -34,7 +34,14 @@ public class SeguridadConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        // VENTAS
+        // --- GERENCIA ---
+        UserDetails jorge = User.withDefaultPasswordEncoder()
+                .username("jorge")
+                .password("gerencia123")
+                .roles("ADMIN")
+                .build();
+
+        // --- VENTAS ---
         UserDetails pamela = User.withDefaultPasswordEncoder()
                 .username("pamela")
                 .password("ventas123")
@@ -47,14 +54,7 @@ public class SeguridadConfig {
                 .roles("USER")
                 .build();
 
-        // GERENCIA
-        UserDetails jorge = User.withDefaultPasswordEncoder()
-                .username("jorge")
-                .password("gerencia123") // Contraseña para Jorge
-                .roles("ADMIN")
-                .build();
-
-        // PRE-PRENSA
+        // --- DISEÑO / PRE-PRENSA (Tú y Alex con la misma clave) ---
         UserDetails matias = User.withDefaultPasswordEncoder()
                 .username("matias")
                 .password("prensa123")
@@ -63,10 +63,24 @@ public class SeguridadConfig {
 
         UserDetails alex = User.withDefaultPasswordEncoder()
                 .username("alex")
-                .password("prensa123")
+                .password("prensa123") // Misma clave que tú
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(pamela, anita, jorge, matias, alex);
+        // --- PRODUCCIÓN (Nuevos) ---
+        UserDetails german = User.withDefaultPasswordEncoder()
+                .username("german")
+                .password("produccion123")
+                .roles("USER")
+                .build();
+
+        UserDetails gloria = User.withDefaultPasswordEncoder()
+                .username("gloria")
+                .password("produccion123")
+                .roles("USER")
+                .build();
+
+        // Agregamos a TODOS a la lista de acceso
+        return new InMemoryUserDetailsManager(jorge, pamela, anita, matias, alex, german, gloria);
     }
 }
