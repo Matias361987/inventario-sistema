@@ -28,7 +28,7 @@ public class ProductoController {
     public String listarProductos(Model model) {
         // Usamos Sort.by para obligar a la base de datos a entregar la lista ordenada
         model.addAttribute("productos", repositorio.findAll(Sort.by(Sort.Direction.ASC, "id")));
-        return "index";
+        return "home";
     }
 
     // 3. MOSTRAR FORMULARIO DE NUEVO PRODUCTO
