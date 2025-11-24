@@ -2,50 +2,71 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Producto</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css">
 </head>
-<body>
+<body class="bg-light">
+
 <nav class="navbar navbar-dark bg-primary mb-4">
     <div class="container">
-        <a class="navbar-brand" href="/">ColorPrint Inventario</a>
+        <a class="navbar-brand fw-bold" href="/">ColorPrint Sistema</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card shadow-lg">
+            <div class="card shadow-lg border-0">
                 <div class="card-header bg-primary text-white">
-                    <h4>Registrar Producto</h4>
+                    <h4 class="mb-0">Registrar Nuevo Producto</h4>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form th:action="@{/guardar}" th:object="${producto}" method="post">
+
                         <div class="mb-3">
-                            <label>Nombre</label>
-                            <input type="text" th:field="*{nombre}" class="form-control" required>
+                            <label class="form-label fw-bold">Categoría (Carpeta)</label>
+                            <input type="text" th:field="*{categoria}" class="form-control" list="listaCategorias" required placeholder="Ej: ADHESIVOS" autocomplete="off">
+                            <small class="text-muted">Escribe una nueva o selecciona una existente.</small>
+                            <datalist id="listaCategorias">
+                                <option value="ADHESIVOS">
+                                <option value="LONAS">
+                                <option value="TINTAS">
+                                <option value="PAPELERIA">
+                            </datalist>
                         </div>
+
                         <div class="mb-3">
-                            <label>Descripción</label>
-                            <input type="text" th:field="*{descripcion}" class="form-control">
+                            <label class="form-label fw-bold">Nombre del Producto</label>
+                            <input type="text" th:field="*{nombre}" class="form-control" required placeholder="Ej: Vinilo Mate">
                         </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <input type="text" th:field="*{descripcion}" class="form-control" placeholder="Ej: 1.50m ancho">
+                        </div>
+
                         <div class="row">
-                            <div class="col mb-3">
-                                <label>Precio</label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Precio</label>
                                 <input type="number" step="0.01" th:field="*{precio}" class="form-control" required>
                             </div>
-                            <div class="col mb-3">
-                                <label>Cantidad</label>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Stock Inicial</label>
                                 <input type="number" th:field="*{cantidad}" class="form-control" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Guardar</button>
-                        <a href="/" class="btn btn-secondary w-100 mt-2">Cancelar</a>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success btn-lg">Guardar Producto</button>
+                            <a href="/" class="btn btn-secondary">Cancelar</a>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>

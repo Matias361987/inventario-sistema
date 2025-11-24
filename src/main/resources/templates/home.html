@@ -3,58 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario ColorPrint</title>
+    <title>Dashboard - ColorPrint</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/lux/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-light">
 
 <nav class="navbar navbar-dark bg-primary mb-4">
     <div class="container">
-        <a class="navbar-brand text-uppercase fw-bold" href="/">ColorPrint Inventario</a>
+        <a class="navbar-brand fw-bold" href="/">COLORPRINT DASHBOARD</a>
         <form th:action="@{/logout}" method="post" class="d-inline">
-            <button type="submit" class="btn btn-sm btn-dark border-white">
-                <i class="fas fa-sign-out-alt"></i> Salir
-            </button>
+            <button type="submit" class="btn btn-sm btn-dark border-white">Salir</button>
         </form>
     </div>
 </nav>
 
 <div class="container">
-    <div class="card shadow-lg">
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <h3>Productos</h3>
-            <a href="/nuevo" class="btn btn-dark"><i class="fas fa-plus"></i> Nuevo</a>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-th-large"></i> Categorías</h2>
+        <a href="/nuevo" class="btn btn-dark"><i class="fas fa-plus"></i> Nuevo Producto</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 col-sm-6 mb-4" th:each="cat : ${categorias}">
+            <div class="card shadow-sm h-100 hover-shadow">
+                <div class="card-body text-center p-5">
+                    <i class="fas fa-folder fa-4x text-warning mb-3"></i>
+                    <h3 class="card-title text-uppercase fw-bold" th:text="${cat}">NOMBRE</h3>
+                    <a th:href="@{/categoria/{nombre}(nombre=${cat})}" class="btn btn-outline-primary mt-3 stretched-link">Abrir Carpeta</a>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <div th:if="${productos.empty}" class="alert alert-info text-center">Inventario vacío.</div>
-            <div class="table-responsive" th:unless="${productos.empty}">
-                <table class="table table-hover align-middle">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th class="d-none d-sm-table-cell">Descripción</th>
-                        <th>Precio</th>
-                        <th class="text-center">Stock</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="p : ${productos}">
-                        <td class="fw-bold text-muted" th:text="${p.id}"></td>
-                        <td class="fw-bold text-nowrap" th:text="${p.nombre}"></td>
-                        <td class="d-none d-sm-table-cell" th:text="${p.descripcion}"></td>
-                        <td class="text-nowrap" th:text="${'$ ' + p.precio}"></td>
-                        <td>
-                            <div class="d-flex justify-content-center gap-2">
-                                <a th:href="@{/producto/{id}/stock/-1(id=${p.id})}" class="btn btn-sm btn-outline-danger"><i class="fas fa-minus"></i></a>
-                                <span class="badge bg-secondary p-2" th:text="${p.cantidad}" style="min-width: 40px;">0</span>
-                                <a th:href="@{/producto/{id}/stock/1(id=${p.id})}" class="btn btn-sm btn-outline-success"><i class="fas fa-plus"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+
+        <div class="col-12" th:if="${categorias.empty}">
+            <div class="alert alert-warning text-center">
+                <h4>Sistema Vacío</h4>
+                <p>Crea tu primer producto para generar una categoría automática.</p>
+                <a href="/nuevo" class="btn btn-warning">Crear Producto</a>
             </div>
         </div>
     </div>
